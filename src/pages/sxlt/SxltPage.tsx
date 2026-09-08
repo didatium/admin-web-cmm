@@ -131,13 +131,11 @@ type ExcelImportResult = {
 
 function ImportExcelDialog({
   open,
-  weekId,
   classList,
   onClose,
   onImport,
 }: {
   open: boolean;
-  weekId: string;
   classList: any[];
   onClose: () => void;
   onImport: (rows: ExcelImportRow[]) => Promise<void>;
@@ -366,14 +364,6 @@ export function SxltPage() {
     rows.forEach((r) => { if (r.class_passive) used.add(r.class_passive); });
     return used;
   }, [rows]);
-
-  // Candidate passive classes (ALL classes, not just the grade — matching mobile which uses all ltList)
-  // Mobile picks from the full class list. We show all classes as options for duty class.
-  const allClassesMap = useMemo(() => {
-    const m = new Map<string, string>();
-    classList.forEach((c: any) => m.set(c.class_id, c.class_name));
-    return m;
-  }, [classList]);
 
   const handleChange = (classActiveId: string, newPassiveId: string) => {
     setAssignments((prev) => ({ ...prev, [classActiveId]: newPassiveId }));
@@ -669,7 +659,6 @@ export function SxltPage() {
       {/* Import Dialog */}
       <ImportExcelDialog
         open={showImport}
-        weekId={activeWeekId}
         classList={classList}
         onClose={() => setShowImport(false)}
         onImport={handleImport}

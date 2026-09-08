@@ -3,9 +3,11 @@ import { apiPost } from 'cmm-shared';
 
 export const ROLE_ADMIN = 'admin';
 
-type User = {
-  id: string;
-  name: string;
+export type User = {
+  id?: string;
+  user_id?: string;
+  name?: string;
+  user_name?: string;
   role: string;
   [key: string]: any;
 };

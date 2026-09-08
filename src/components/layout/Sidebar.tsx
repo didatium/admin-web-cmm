@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom';
 
 const navItems = [
-  { name: 'Dashboard', path: '/dashboard' },
+  { name: 'Trang chủ', path: '/dashboard' },
   { name: 'Danh sách lớp học', path: '/dslh' },
   { name: 'Quản lý học sinh', path: '/students' },
-  { name: 'Weeks', path: '/weeks' },
-  { name: 'Rules', path: '/rules' },
+  { name: 'Quản lý lịch tuần', path: '/weeks' },
+  { name: 'Giao ước thi đua', path: '/rules' },
   { name: 'Sổ tay vi phạm', path: '/stvp' },
   { name: 'Bảng xếp hạng', path: '/xbxh' },
   { name: 'Thống kê dữ liệu', path: '/tkdl' },
@@ -24,10 +24,9 @@ export function Sidebar() {
             key={item.name}
             to={item.path}
             className={({ isActive }) =>
-              `block rounded-md px-3 py-2 text-sm font-medium ${
-                isActive
-                  ? 'bg-indigo-50 text-indigo-700'
-                  : 'text-gray-700 hover:bg-gray-100'
+              `block rounded-md px-3 py-2 text-sm font-medium ${isActive
+                ? 'bg-indigo-50 text-indigo-700'
+                : 'text-gray-700 hover:bg-gray-100'
               }`
             }
           >

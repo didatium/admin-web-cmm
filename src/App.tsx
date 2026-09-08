@@ -13,6 +13,7 @@ import { XbxhPage } from './pages/xbxh/XbxhPage';
 import { DslhPage } from './pages/dslh/DslhPage';
 import { TkdlPage } from './pages/tkdl/TkdlPage';
 import { SxltPage } from './pages/sxlt/SxltPage';
+import { ProfilePage } from './pages/profile/ProfilePage';
 import { setupApiClient } from './api/setupApiClient';
 
 // Initialize the API client
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/score" element={<Navigate to="/xbxh" replace />} />
                 <Route path="/tkdl" element={<TkdlPage />} />
                 <Route path="/sxlt" element={<SxltPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
               </Route>
             </Route>
 

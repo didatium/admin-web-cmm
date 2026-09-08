@@ -390,7 +390,7 @@ export function StvpPage() {
             <>
               {selectedClassObj && selectedWeekObj && (
                 <p className="text-sm text-muted-foreground">
-                  Lớp <span className="font-medium">{selectedClassObj.class_name}</span> —{' '}
+                  <span className="font-medium">{selectedClassObj.class_name}</span> —{' '}
                   <span className="font-medium">{selectedWeekObj.week_name}</span>
                 </p>
               )}
