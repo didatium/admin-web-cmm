@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { apiPost } from 'cmm-shared';
 
 export const ROLE_ADMIN = 'admin';
@@ -25,6 +26,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,8 +50,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (user_name: string, password: string) => {
     try {
       const response = await apiPost('/login', { user_name, password });
-      console.log(response)
-      console.log({ user_name, password })
       if (response?.success) {
         const { token: newToken, user: newUser } = response;
 
@@ -79,6 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem('user');
     setUser(null);
     setToken(null);
+    queryClient.clear();
   };
 
   const value = {

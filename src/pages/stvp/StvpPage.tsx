@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { type ColumnDef, type CellContext } from '@tanstack/react-table';
 import { Plus, BookOpen, Star, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -9,6 +9,8 @@ import {
   useRules,
   useViphamByClassAndWeek,
   useDeleteVipham,
+  getCurrentWeekId,
+  markScoreStale,
 } from 'cmm-shared';
 import { useAuth } from '@/auth/AuthContext';
 
@@ -72,22 +74,6 @@ const DAY_LABELS: Record<number, string> = {
 };
 
 // ---------------------------------------------------------------------------
-// Helper — find current week by date
-// ---------------------------------------------------------------------------
-function findCurrentWeekId(weeks: any[]): string {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const current = weeks.find((w: any) => {
-    const start = new Date(w.start_date);
-    const end = new Date(w.end_date);
-    start.setHours(0, 0, 0, 0);
-    end.setHours(23, 59, 59, 999);
-    return today >= start && today <= end;
-  });
-  return current ? String(current.week_id) : '';
-}
-
-// ---------------------------------------------------------------------------
 // TableSkeleton
 // ---------------------------------------------------------------------------
 function TableSkeleton() {
@@ -114,7 +100,7 @@ export function StvpPage() {
 
   // Initialise week to current week once data loads
   const defaultWeekId = useMemo(
-    () => (weekList.length > 0 ? findCurrentWeekId(weekList) : ''),
+    () => getCurrentWeekId(weekList),
     [weekList],
   );
 
@@ -122,11 +108,11 @@ export function StvpPage() {
   const [selectedWeek, setSelectedWeek] = useState('');
 
   // Sync default week when weeks loads (only once)
-  useMemo(() => {
+  useEffect(() => {
     if (selectedWeek === '' && defaultWeekId) {
       setSelectedWeek(defaultWeekId);
     }
-  }, [defaultWeekId]);
+  }, [defaultWeekId, selectedWeek]);
 
   const isReady = !!selectedClass && !!selectedWeek;
 
@@ -167,6 +153,7 @@ export function StvpPage() {
     if (!deleteTarget) return;
     try {
       await deleteVipham.mutateAsync(deleteTarget.vpm_id);
+      markScoreStale(selectedClass, selectedWeek);
       toast.success('Đã xoá bản ghi');
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : 'Xoá thất bại');
@@ -414,6 +401,7 @@ export function StvpPage() {
             classId={selectedClass}
             weekId={selectedWeek}
             createdBy={createdBy}
+            onSaved={() => markScoreStale(selectedClass, selectedWeek)}
           />
           <AddAdhocViolationDialog
             open={showAddAdhoc}
@@ -421,6 +409,7 @@ export function StvpPage() {
             classId={selectedClass}
             weekId={selectedWeek}
             createdBy={createdBy}
+            onSaved={() => markScoreStale(selectedClass, selectedWeek)}
           />
           <SDBDialog
             open={showSDB}
@@ -428,6 +417,7 @@ export function StvpPage() {
             classId={selectedClass}
             weekId={selectedWeek}
             createdBy={createdBy}
+            onSaved={() => markScoreStale(selectedClass, selectedWeek)}
           />
         </>
       )}

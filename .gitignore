@@ -26,3 +26,4 @@ dist-ssr
 # Environment variables
 .env
 .env.example
+E2E_AUDIT_REPORT.md

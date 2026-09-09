@@ -23,26 +23,13 @@ import {
   useScoreByWeek,
   useViphamByWeek,
   useWeeks,
+  getCurrentWeekId,
+  isScoreStale,
 } from 'cmm-shared';
 
 import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/components/ui/badge';
 import { useAuth } from '../auth/AuthContext';
-
-function findCurrentWeekId(weeks: any[]): string {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const current = weeks.find((week: any) => {
-    const start = new Date(week.start_date);
-    const end = new Date(week.end_date);
-    start.setHours(0, 0, 0, 0);
-    end.setHours(23, 59, 59, 999);
-
-    return today >= start && today <= end;
-  });
-
-  return current ? String(current.week_id) : (weeks[0] ? String(weeks[0].week_id) : '');
-}
 
 function getViolationCount(entry: any): number {
   if (!entry) return 0;
@@ -104,7 +91,7 @@ export function DashboardPage() {
   const { data: rules = [], isLoading: rulesLoading, error: rulesError } = useRules();
 
   const weekList = useMemo(() => (Array.isArray(weeks) ? weeks : []), [weeks]);
-  const currentWeekId = useMemo(() => findCurrentWeekId(weekList), [weekList]);
+  const currentWeekId = useMemo(() => getCurrentWeekId(weekList, true), [weekList]);
   const currentWeek = useMemo(
     () => weekList.find((week: any) => String(week.week_id) === String(currentWeekId)),
     [weekList, currentWeekId],
@@ -362,6 +349,7 @@ export function DashboardPage() {
                             {idx + 1}
                           </span>
                           <span className="font-medium text-slate-800">{item.class_name}</span>
+                          {isScoreStale(String(item.class_id), String(currentWeekId)) && <Badge variant="warning">Cần tính lại</Badge>}
                         </div>
                         <span className="font-semibold text-emerald-700">{Number(item.score).toFixed(1)}</span>
                       </Link>

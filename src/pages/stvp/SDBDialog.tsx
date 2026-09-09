@@ -14,21 +14,22 @@ import { Input } from '@/components/ui/input';
 
 // Mirrors the mobile DEFAULT_SDB structure: array of { day, Tiet1..Tiet5 }
 const DEFAULT_SDB = [
+  { day: '1', Tiet1: '0', Tiet2: '0', Tiet3: '0', Tiet4: '0', Tiet5: '0' },
   { day: '2', Tiet1: '0', Tiet2: '0', Tiet3: '0', Tiet4: '0', Tiet5: '0' },
   { day: '3', Tiet1: '0', Tiet2: '0', Tiet3: '0', Tiet4: '0', Tiet5: '0' },
   { day: '4', Tiet1: '0', Tiet2: '0', Tiet3: '0', Tiet4: '0', Tiet5: '0' },
   { day: '5', Tiet1: '0', Tiet2: '0', Tiet3: '0', Tiet4: '0', Tiet5: '0' },
   { day: '6', Tiet1: '0', Tiet2: '0', Tiet3: '0', Tiet4: '0', Tiet5: '0' },
-  { day: '7', Tiet1: '0', Tiet2: '0', Tiet3: '0', Tiet4: '0', Tiet5: '0' },
 ];
 
 const DAY_LABELS: Record<string, string> = {
-  '2': 'Thứ 2',
-  '3': 'Thứ 3',
-  '4': 'Thứ 4',
-  '5': 'Thứ 5',
-  '6': 'Thứ 6',
-  '7': 'Thứ 7',
+  '0': 'Chủ nhật',
+  '1': 'Thứ 2',
+  '2': 'Thứ 3',
+  '3': 'Thứ 4',
+  '4': 'Thứ 5',
+  '5': 'Thứ 6',
+  '6': 'Thứ 7',
 };
 
 const PERIOD_KEYS = ['Tiet1', 'Tiet2', 'Tiet3', 'Tiet4', 'Tiet5'] as const;
@@ -48,9 +49,10 @@ interface Props {
   classId: string;
   weekId: string;
   createdBy: string;
+  onSaved?: () => void;
 }
 
-export function SDBDialog({ open, onClose, classId, weekId, createdBy }: Props) {
+export function SDBDialog({ open, onClose, classId, weekId, createdBy, onSaved }: Props) {
   const { data: existing, isLoading } = useSDBByClassAndWeek(classId, weekId);
   const createSDB = useCreateSDB();
   const updateSDB = useUpdateSDB();
@@ -110,6 +112,7 @@ export function SDBDialog({ open, onClose, classId, weekId, createdBy }: Props) 
         await createSDB.mutateAsync(payload);
         toast.success('Lưu sổ đầu bài thành công');
       }
+      onSaved?.();
       onClose();
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : 'Có lỗi xảy ra');

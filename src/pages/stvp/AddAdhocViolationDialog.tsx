@@ -29,6 +29,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 const DAY_OPTIONS = [
+  { value: '0', label: 'Chủ nhật' },
   { value: '1', label: 'Thứ 2' },
   { value: '2', label: 'Thứ 3' },
   { value: '3', label: 'Thứ 4' },
@@ -56,9 +57,10 @@ interface Props {
   classId: string;
   weekId: string;
   createdBy: string;
+  onSaved?: () => void;
 }
 
-export function AddAdhocViolationDialog({ open, onClose, classId, weekId, createdBy }: Props) {
+export function AddAdhocViolationDialog({ open, onClose, classId, weekId, createdBy, onSaved }: Props) {
   const createVipham = useCreateVipham();
 
   const form = useForm<FormValues>({
@@ -83,6 +85,7 @@ export function AddAdhocViolationDialog({ open, onClose, classId, weekId, create
         quantity: parseInt(values.quantity, 10),
         create_by: createdBy,
       });
+      onSaved?.();
       toast.success('Thêm điểm thưởng/phạt thành công');
       handleClose();
     } catch (err: unknown) {

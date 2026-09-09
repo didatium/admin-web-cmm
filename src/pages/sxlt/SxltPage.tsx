@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { FileSpreadsheet, Save, Trash2, Upload, CheckCircle2, XCircle, AlertTriangle, CalendarRange } from 'lucide-react';
 import { toast } from 'sonner';
 import XLSX from 'xlsx-js-style';
@@ -9,6 +9,7 @@ import {
   useLichtrucByWeek,
   useSaveLichtruc,
   useDeleteAllLichtruc,
+  getCurrentWeekId,
 } from 'cmm-shared';
 
 import { Button } from '@/components/ui/button';
@@ -47,22 +48,6 @@ import {
   DialogFooter,
   DialogDescription,
 } from '@/components/ui/dialog';
-
-// ---------------------------------------------------------------------------
-// Helper — find current week
-// ---------------------------------------------------------------------------
-function findCurrentWeekId(weeks: any[]): string {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const current = weeks.find((w: any) => {
-    const start = new Date(w.start_date);
-    const end = new Date(w.end_date);
-    start.setHours(0, 0, 0, 0);
-    end.setHours(23, 59, 59, 999);
-    return today >= start && today <= end;
-  });
-  return current ? String(current.week_id) : (weeks[0] ? String(weeks[0].week_id) : '');
-}
 
 // ---------------------------------------------------------------------------
 // Helper — class_id normalization (same as mobile: 'cls' + shortName)
@@ -302,7 +287,7 @@ export function SxltPage() {
   const classList = useMemo(() => (classes as any[]) ?? [], [classes]);
 
   const defaultWeekId = useMemo(
-    () => (weekList.length > 0 ? findCurrentWeekId(weekList) : ''),
+    () => getCurrentWeekId(weekList, true),
     [weekList],
   );
 
@@ -339,7 +324,7 @@ export function SxltPage() {
   const [assignments, setAssignments] = useState<Record<string, string>>({});
 
   // When ltList or grade changes, re-seed assignments from server data
-  useMemo(() => {
+  useEffect(() => {
     const seed: Record<string, string> = {};
     gradeClasses.forEach((c: any) => {
       const existing = ltList.find((lt: any) => lt.class_active === c.class_id);

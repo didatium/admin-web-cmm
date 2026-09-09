@@ -14,6 +14,8 @@ import {
   useDeleteAllVipham,
   useDeleteSDBByClass,
   useDeleteAllSDB,
+  useDeleteStudentsByClass,
+  useDeleteAllStudents,
 } from 'cmm-shared';
 
 import {
@@ -56,17 +58,21 @@ export function CascadeDeleteDialog({ target, onClose }: CascadeDeleteDialogProp
 
   const deleteSDBByClass = useDeleteSDBByClass();
   const deleteAllSDB = useDeleteAllSDB();
+  const deleteStudentsByClass = useDeleteStudentsByClass();
+  const deleteAllStudents = useDeleteAllStudents();
 
   if (!target) return null;
 
   const isDeleteAll = target.type === 'all';
 
-  // Helper to safely execute a delete step without breaking if record doesn't exist (404)
-  const safeDelete = async (fn: () => Promise<any>) => {
+  // Score is the only class-delete endpoint that uses 404 for an empty child
+  // collection. Every other cascade endpoint returns 200 with a success
+  // message even when its DELETE affects zero rows.
+  const deleteScoreIfPresent = async (fn: () => Promise<any>) => {
     try {
       await fn();
     } catch (err: any) {
-      console.warn('Cascade delete sub-step skipped:', err?.message || err);
+      if (err?.status !== 404) throw err;
     }
   };
 
@@ -76,25 +82,27 @@ export function CascadeDeleteDialog({ target, onClose }: CascadeDeleteDialogProp
 
       if (isDeleteAll) {
         // Cascade delete ALL in exact sequence
-        await safeDelete(() => deleteAllVipham.mutateAsync());
-        await safeDelete(() => deleteAllScore.mutateAsync());
-        await safeDelete(() => deleteAllLichtruc.mutateAsync());
-        await safeDelete(() => deleteAllSDB.mutateAsync());
-        await safeDelete(() => deleteAllUsers.mutateAsync());
-        await safeDelete(() => deleteAllClasses.mutateAsync());
+        await deleteAllVipham.mutateAsync();
+        await deleteAllScore.mutateAsync();
+        await deleteAllLichtruc.mutateAsync();
+        await deleteAllSDB.mutateAsync();
+        await deleteAllStudents.mutateAsync();
+        await deleteAllUsers.mutateAsync();
+        await deleteAllClasses.mutateAsync();
 
         toast.success('Đã xoá toàn bộ danh sách thành công!');
       } else {
         const { classId, userId, className } = target;
 
         // Cascade delete single class in exact sequence
-        await safeDelete(() => deleteViphamByClass.mutateAsync(classId));
-        await safeDelete(() => deleteScoreByClass.mutateAsync(classId));
-        await safeDelete(() => deleteLichtruc.mutateAsync(classId));
-        await safeDelete(() => deleteSDBByClass.mutateAsync(classId));
+        await deleteViphamByClass.mutateAsync(classId);
+        await deleteScoreIfPresent(() => deleteScoreByClass.mutateAsync(classId));
+        await deleteLichtruc.mutateAsync(classId);
+        await deleteSDBByClass.mutateAsync(classId);
+        await deleteStudentsByClass.mutateAsync(classId);
 
         if (userId) {
-          await safeDelete(() => deleteUser.mutateAsync(userId));
+          await deleteUser.mutateAsync(userId);
         }
 
         // Deleting class record is mandatory
@@ -131,6 +139,7 @@ export function CascadeDeleteDialog({ target, onClose }: CascadeDeleteDialogProp
                 <li>Điểm thi đua (Scores)</li>
                 <li>Lịch trực thi đua (Duty schedules)</li>
                 <li>Sổ đầu bài (SDB records)</li>
+                <li>Toàn bộ học sinh trong lớp này (Students)</li>
                 <li>Tài khoản Sao Đỏ / Người dùng liên kết</li>
                 <li>Hồ sơ Lớp học (Class entity)</li>
               </ol>

@@ -14,6 +14,9 @@ import {
   useUpdateScore,
   TinhDiem2,
   calculateRankingNotes,
+  getCurrentWeekId,
+  clearScoreStale,
+  isScoreStale,
 } from 'cmm-shared';
 import { useAuth } from '@/auth/AuthContext';
 
@@ -54,23 +57,8 @@ type RankingRow = {
   deductions_bonuses: string;
   final_score: number;
   note: string;
+  needs_recalculation: boolean;
 };
-
-// ---------------------------------------------------------------------------
-// Helper — find current week by date
-// ---------------------------------------------------------------------------
-function findCurrentWeekId(weeks: any[]): string {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const current = weeks.find((w: any) => {
-    const start = new Date(w.start_date);
-    const end = new Date(w.end_date);
-    start.setHours(0, 0, 0, 0);
-    end.setHours(23, 59, 59, 999);
-    return today >= start && today <= end;
-  });
-  return current ? String(current.week_id) : (weeks[0] ? String(weeks[0].week_id) : '');
-}
 
 // ---------------------------------------------------------------------------
 // Main Component
@@ -86,7 +74,7 @@ export function XbxhPage() {
 
   // Initial week selection defaults to current week
   const defaultWeekId = useMemo(
-    () => (weekList.length > 0 ? findCurrentWeekId(weekList) : ''),
+    () => getCurrentWeekId(weekList, true),
     [weekList],
   );
 
@@ -165,6 +153,7 @@ export function XbxhPage() {
         deductions_bonuses: deductionsBonuses,
         final_score: finalScore,
         note: note,
+        needs_recalculation: isScoreStale(String(cls.class_id), String(activeWeekId)),
       };
     });
 
@@ -176,7 +165,7 @@ export function XbxhPage() {
       ...item,
       rank: idx + 1,
     }));
-  }, [classList, selectedGrade, scoreList]);
+  }, [activeWeekId, classList, selectedGrade, scoreList]);
 
   // Handle Calculate Points
   const handleCalculatePoint = async () => {
@@ -187,11 +176,18 @@ export function XbxhPage() {
 
     try {
       setCalculating(true);
-      const scoreItems = TinhDiem2(data3, classList, user, activeWeekId, sdbList as any[]);
+      const existingScores = (scoreList as any[]) ?? [];
+      const scoreItems = TinhDiem2(data3, classList, user, activeWeekId, sdbList as any[]).map((item) => {
+        const existingScore = existingScores.find((score: any) =>
+          String(score.class_id) === String(item.class_id) && String(score.week_id) === String(item.week_id),
+        );
+        return { ...item, deft: existingScore?.deft ?? null };
+      });
       await createScore.mutateAsync(scoreItems);
 
       const noteList = calculateRankingNotes(classList, data3, user, activeWeekObj || activeWeekId);
       await Promise.all(noteList.map(item => updateScore.mutateAsync(item)));
+      clearScoreStale(scoreItems.map((item) => String(item.class_id)), activeWeekId);
 
       toast.success('Đã tính điểm thành công!');
     } catch (err: any) {
@@ -247,7 +243,10 @@ export function XbxhPage() {
         accessorKey: 'class_name',
         header: 'Lớp',
         cell: ({ row }) => (
-          <span className="font-semibold">{row.original.class_name}</span>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold">{row.original.class_name}</span>
+            {row.original.needs_recalculation && <Badge variant="warning">Cần tính lại</Badge>}
+          </div>
         ),
       },
       {

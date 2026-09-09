@@ -40,25 +40,35 @@ type ImportRowResult = {
   errorMessage?: string;
 };
 
+const toIsoDate = (year: number, month: number, day: number): string | null => {
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) return null;
+  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+};
+
 const parseExcelDate = (excelDate: any): string | null => {
   if (!excelDate) return null;
 
   if (typeof excelDate === 'string') {
     const trimmed = excelDate.trim();
-    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+      const [y, m, d] = trimmed.split('-').map(Number);
+      return toIsoDate(y, m, d);
+    }
     if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(trimmed)) {
       const [d, m, y] = trimmed.split('/');
-      return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+      return toIsoDate(Number(y), Number(m), Number(d));
     }
   }
 
   const num = Number(excelDate);
   if (!isNaN(num) && num > 0) {
     const date = new Date(Math.round((num - 25569) * 86400 * 1000));
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, '0');
-    const d = String(date.getDate()).padStart(2, '0');
-    return `${y}-${m}-${d}`;
+    return toIsoDate(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
   }
 
   return null;
@@ -136,7 +146,7 @@ export function ImportStudentDialog({
           const rawGender = String(row['Giới tính'] || row['giới tính'] || 'Nam').trim();
 
           const matchedClassId = findClassId(rawClassName, classes);
-          const parsedDate = parseExcelDate(rawDate) || '2008-01-01';
+          const parsedDate = parseExcelDate(rawDate);
 
           let isValid = true;
           let errorMessage = '';
@@ -150,6 +160,9 @@ export function ImportStudentDialog({
           } else if (!matchedClassId) {
             isValid = false;
             errorMessage = `Không tìm thấy lớp học [${rawClassName}] trong hệ thống`;
+          } else if (!parsedDate) {
+            isValid = false;
+            errorMessage = 'Ngày sinh không hợp lệ';
           }
 
           return {
@@ -189,7 +202,7 @@ export function ImportStudentDialog({
         student_name: r.rawName,
         class_id: r.matchedClassId!,
         gioi_tinh: r.rawGender,
-        ngay_sinh: r.parsedDate || '2008-01-01',
+        ngay_sinh: r.parsedDate!,
       }));
 
       await onImport(payload);

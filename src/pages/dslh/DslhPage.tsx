@@ -84,6 +84,8 @@ export function DslhPage() {
 
     // 1. Process classes and their linked Sao Đỏ users
     classList.forEach((cls: any) => {
+      // Business rule: one Sao Đỏ account is linked to each class; cascade
+      // deletion deliberately removes this first matching account only.
       const matchedUser = usersList.find((u: any) => u.user_class === cls.class_id);
       if (matchedUser) {
         processedUserIds.add(matchedUser.user_id);
