@@ -1,5 +1,5 @@
 import { AlertCircle, Download, FileText } from 'lucide-react';
-import { FormatDate } from 'cmm-shared';
+import { FormatDate } from '@/shared';
 
 import { Button } from '@/components/ui/button';
 import {

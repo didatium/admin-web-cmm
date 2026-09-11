@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { apiPost } from 'cmm-shared';
+import { apiPost } from '@/shared';
 
 export const ROLE_ADMIN = 'admin';
 

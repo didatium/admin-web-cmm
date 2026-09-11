@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
-import { useCreateClass, useCreateUser, useClasses } from 'cmm-shared';
+import { useCreateClass, useCreateUser, useClasses } from '@/shared';
 
 import {
   Dialog,

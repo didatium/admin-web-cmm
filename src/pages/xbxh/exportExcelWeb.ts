@@ -1,5 +1,5 @@
 import XLSX from 'xlsx-js-style';
-import { calculateExcelData, FormatDate } from 'cmm-shared';
+import { calculateExcelData, FormatDate } from '@/shared';
 
 export function minus1days(item: any) {
   if (!item) return new Date().toDateString();

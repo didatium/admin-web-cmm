@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
-import { useWeeks, useCreateWeek, useUpdateWeek } from 'cmm-shared';
+import { useWeeks, useCreateWeek, useUpdateWeek } from '@/shared';
 
 import { DataTable } from '@/components/data-table/DataTable';
 import { Button } from '@/components/ui/button';

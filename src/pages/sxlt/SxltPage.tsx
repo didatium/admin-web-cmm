@@ -10,7 +10,7 @@ import {
   useSaveLichtruc,
   useDeleteAllLichtruc,
   getCurrentWeekId,
-} from 'cmm-shared';
+} from '@/shared';
 
 import { Button } from '@/components/ui/button';
 import {

@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { useRules, useCreateVipham, useStudentsByClass } from 'cmm-shared';
+import { useRules, useCreateVipham, useStudentsByClass } from '@/shared';
 import {
   Dialog,
   DialogContent,

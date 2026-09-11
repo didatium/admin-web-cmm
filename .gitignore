@@ -27,3 +27,4 @@ dist-ssr
 .env
 .env.example
 E2E_AUDIT_REPORT.md
+.vercel

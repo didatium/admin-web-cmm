@@ -16,7 +16,7 @@ import {
   useDeleteAllSDB,
   useDeleteStudentsByClass,
   useDeleteAllStudents,
-} from 'cmm-shared';
+} from '@/shared';
 
 import {
   AlertDialog,

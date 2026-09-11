@@ -1,4 +1,4 @@
-import { configureApiClient } from 'cmm-shared';
+import { configureApiClient } from '@/shared';
 import { toast } from 'sonner';
 
 export function setupApiClient() {

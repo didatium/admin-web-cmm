@@ -10,6 +10,5 @@ export default defineConfig({
     alias: {
       '@': path.resolve(import.meta.dirname, './src'),
     },
-    dedupe: ['react', 'react-dom', '@tanstack/react-query'],
   },
 })

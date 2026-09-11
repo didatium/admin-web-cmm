@@ -17,7 +17,7 @@ import {
   getCurrentWeekId,
   clearScoreStale,
   isScoreStale,
-} from 'cmm-shared';
+} from '@/shared';
 import { useAuth } from '@/auth/AuthContext';
 
 import { DataTable } from '@/components/data-table/DataTable';

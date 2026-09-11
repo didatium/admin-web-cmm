@@ -12,7 +12,7 @@ import {
   useClasses,
   useAllUsers,
   useResetPassword,
-} from 'cmm-shared';
+} from '@/shared';
 
 import { DataTable } from '@/components/data-table/DataTable';
 import { Button } from '@/components/ui/button';

@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { useCreateVipham } from 'cmm-shared';
+import { useCreateVipham } from '@/shared';
 import {
   Dialog,
   DialogContent,

@@ -1,5 +1,5 @@
 import XLSX from 'xlsx-js-style';
-import { FormatDate, getCleanDate } from 'cmm-shared';
+import { FormatDate, getCleanDate } from '@/shared';
 
 export function exportStudentViphamExcel(
   student: any,

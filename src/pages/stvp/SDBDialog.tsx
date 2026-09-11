@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import { useSDBByClassAndWeek, useCreateSDB, useUpdateSDB } from 'cmm-shared';
+import { useSDBByClassAndWeek, useCreateSDB, useUpdateSDB } from '@/shared';
 import {
   Dialog,
   DialogContent,

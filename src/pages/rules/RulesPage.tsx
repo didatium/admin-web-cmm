@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
 
-import { useRules, useCreateRule, useUpdateRule, useDeleteRule } from 'cmm-shared';
+import { useRules, useCreateRule, useUpdateRule, useDeleteRule } from '@/shared';
 
 import { DataTable } from '@/components/data-table/DataTable';
 import { Button } from '@/components/ui/button';

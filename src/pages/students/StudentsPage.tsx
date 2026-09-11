@@ -17,7 +17,7 @@ import {
   useClasses,
   useViphamByClass,
   apiGet,
-} from 'cmm-shared';
+} from '@/shared';
 
 import { cn } from '@/lib/utils';
 import { DataTable } from '@/components/data-table/DataTable';
@@ -469,7 +469,7 @@ export function StudentsPage() {
     return allStudents.filter((s) => s.class_id === filterClass);
   }, [allStudents, filterClass]);
 
-  // Violation queries using cmm-shared hook logic
+  // Violation queries using shared hook logic
   const { data: singleClassVipham = [] } = useViphamByClass(filterClass !== 'all' ? filterClass : undefined);
 
   const allClassViphamQueries = useQueries({

@@ -3,7 +3,7 @@ import {
   FormatDate,
   processScoreStatistics,
   processViphamStatistics,
-} from 'cmm-shared';
+} from '@/shared';
 
 export function exportScoreReportExcel(
   scoreList: any[],
