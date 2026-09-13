@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { User, LogOut, ChevronDown } from 'lucide-react';
+import { User, LogOut, ChevronDown, Menu } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { SmallScreenGuard } from './SmallScreenGuard';
 import { useAuth } from '../../auth/AuthContext';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +17,18 @@ import {
 export function AppLayout() {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
+
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
+    return localStorage.getItem('cmm_sidebar_collapsed') === 'true';
+  });
+
+  const toggleSidebar = () => {
+    setIsCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem('cmm_sidebar_collapsed', String(next));
+      return next;
+    });
+  };
 
   const displayName = user?.name || user?.user_name || 'Admin';
   const initial = displayName.charAt(0).toUpperCase();
@@ -35,11 +49,19 @@ export function AppLayout() {
   return (
     <div className="flex h-screen bg-white">
       <SmallScreenGuard />
-      <Sidebar />
+      <Sidebar isCollapsed={isCollapsed} onToggle={toggleSidebar} />
       <div className="flex flex-1 flex-col min-w-0">
-        <header className="flex h-16 items-center justify-between border-b px-6 bg-white shadow-sm">
-          <div className="font-medium text-gray-800">
-            {/* Topbar content */}
+        <header className="flex h-16 items-center justify-between border-b px-4 lg:px-6 bg-white shadow-sm">
+          <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              className="h-9 w-9 text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+              title={isCollapsed ? 'Mở rộng sidebar' : 'Thu gọn sidebar'}
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
           </div>
           <div className="flex items-center space-x-4">
             <DropdownMenu>
