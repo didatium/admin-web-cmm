@@ -193,7 +193,7 @@ export function TkdlPage() {
   const isLoading = loadingWeeks || loadingClasses || loadingScores;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 min-w-0 max-w-full">
       {/* Page Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
@@ -314,33 +314,37 @@ export function TkdlPage() {
           <Skeleton className="h-64 w-full" />
         </div>
       ) : (
-        <>
+        <div className="min-w-0 max-w-full">
           {reportType === 'diem' ? (
-            <div className="space-y-2">
+            <div className="space-y-3 min-w-0 max-w-full">
               <h3 className="font-semibold text-sm text-muted-foreground">
                 Kết quả thống kê điểm từ Tuần {startNum} đến Tuần {endNum}
               </h3>
-              <DataTable
-                columns={scoreColumns}
-                data={scoreStats}
-                searchPlaceholder="Tìm kiếm tên lớp..."
-                searchColumn="class_name"
-              />
+              <div className="w-full min-w-0 max-w-full overflow-x-auto rounded-lg border bg-card p-4 shadow-sm">
+                <DataTable
+                  columns={scoreColumns}
+                  data={scoreStats}
+                  searchPlaceholder="Tìm kiếm tên lớp..."
+                  searchColumn="class_name"
+                />
+              </div>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3 min-w-0 max-w-full">
               <h3 className="font-semibold text-sm text-muted-foreground">
                 Thống kê vi phạm lớp {selectClassObj?.class_name || activeClassId} từ Tuần {startNum} đến Tuần {endNum}
               </h3>
-              <DataTable
-                columns={viphamColumns}
-                data={viphamStats}
-                searchPlaceholder="Tìm kiếm ghi chú..."
-                searchColumn="note"
-              />
+              <div className="w-full min-w-0 max-w-full overflow-x-auto rounded-lg border bg-card p-4 shadow-sm">
+                <DataTable
+                  columns={viphamColumns}
+                  data={viphamStats}
+                  searchPlaceholder="Tìm kiếm ghi chú..."
+                  searchColumn="note"
+                />
+              </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { User, LogOut, ChevronDown } from 'lucide-react';
 import { Sidebar } from './Sidebar';
+import { SmallScreenGuard } from './SmallScreenGuard';
 import { useAuth } from '../../auth/AuthContext';
 import {
   DropdownMenu,
@@ -33,8 +34,9 @@ export function AppLayout() {
 
   return (
     <div className="flex h-screen bg-white">
+      <SmallScreenGuard />
       <Sidebar />
-      <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col min-w-0">
         <header className="flex h-16 items-center justify-between border-b px-6 bg-white shadow-sm">
           <div className="font-medium text-gray-800">
             {/* Topbar content */}
