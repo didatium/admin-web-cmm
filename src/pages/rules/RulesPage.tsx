@@ -339,8 +339,8 @@ export function RulesPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Rules</h1>
-          <p className="text-sm text-muted-foreground">Manage violation rules</p>
+          <h1 className="text-2xl font-bold">Giao ước thi đua</h1>
+          <p className="text-sm text-muted-foreground">Thiết lập danh mục các tiêu chí nội quy</p>
         </div>
         <Button onClick={() => setShowCreate(true)}>
           <Plus className="mr-2 h-4 w-4" />

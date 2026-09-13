@@ -451,8 +451,8 @@ export function WeeksPage() {
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Weeks</h1>
-          <p className="text-sm text-muted-foreground">Manage school weeks</p>
+          <h1 className="text-2xl font-bold">Quản lý lịch tuần</h1>
+          <p className="text-sm text-muted-foreground">Thiết lập danh mục các tuần học trong năm học</p>
         </div>
         <Button onClick={() => setShowCreate(true)}>
           <Plus className="mr-2 h-4 w-4" />
