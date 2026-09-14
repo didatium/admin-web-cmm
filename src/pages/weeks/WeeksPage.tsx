@@ -100,7 +100,7 @@ function CreateWeekDialog({
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add Week</DialogTitle>
+          <DialogTitle>Thêm tuần</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
@@ -111,7 +111,7 @@ function CreateWeekDialog({
                 <FormItem>
                   <FormLabel>Week ID</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. W01" {...field} />
+                    <Input placeholder="e.g. wk01" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -122,7 +122,7 @@ function CreateWeekDialog({
               name="week_name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Week Name</FormLabel>
+                  <FormLabel>Tên tuần</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g. Tuần 1" {...field} />
                   </FormControl>
@@ -135,7 +135,7 @@ function CreateWeekDialog({
               name="start_date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Start Date</FormLabel>
+                  <FormLabel>Ngày bắt đầu</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -174,7 +174,7 @@ function CreateWeekDialog({
               name="end_date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>End Date</FormLabel>
+                  <FormLabel>Ngày kết thúc</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -272,7 +272,7 @@ function EditWeekDialog({
               name="start_date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>Start Date</FormLabel>
+                  <FormLabel>Ngày bắt đầu</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -311,7 +311,7 @@ function EditWeekDialog({
               name="end_date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>End Date</FormLabel>
+                  <FormLabel>Ngày kết thúc</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -406,11 +406,11 @@ export function WeeksPage() {
   };
 
   const columns: ColumnDef<WeekRow, unknown>[] = [
-    { accessorKey: 'week_id', header: 'Week ID' },
-    { accessorKey: 'week_name', header: 'Week Name' },
+    { accessorKey: 'week_id', header: 'ID' },
+    { accessorKey: 'week_name', header: 'Tên tuần' },
     {
       accessorKey: 'start_date',
-      header: 'Start Date',
+      header: 'Ngày bắt đầu',
       cell: ({ row }: CellContext<WeekRow, unknown>) => {
         const val = row.getValue('start_date') as string | null;
         return val ? format(new Date(val), 'dd/MM/yyyy', { locale: vi }) : '—';
@@ -418,7 +418,7 @@ export function WeeksPage() {
     },
     {
       accessorKey: 'end_date',
-      header: 'End Date',
+      header: 'Ngày kết thúc',
       cell: ({ row }: CellContext<WeekRow, unknown>) => {
         const val = row.getValue('end_date') as string | null;
         return val ? format(new Date(val), 'dd/MM/yyyy', { locale: vi }) : '—';
@@ -456,7 +456,7 @@ export function WeeksPage() {
         </div>
         <Button onClick={() => setShowCreate(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Add Week
+          Thêm tuần
         </Button>
       </div>
 

@@ -475,10 +475,10 @@ export function StudentsPage() {
   const allClassViphamQueries = useQueries({
     queries: filterClass === 'all'
       ? classes.map((c) => ({
-          queryKey: ['vipham', 'class', c.class_id],
-          queryFn: () => apiGet('/viphamclass/' + c.class_id),
-          enabled: filterClass === 'all',
-        }))
+        queryKey: ['vipham', 'class', c.class_id],
+        queryFn: () => apiGet('/viphamclass/' + c.class_id),
+        enabled: filterClass === 'all',
+      }))
       : [],
   });
 
@@ -639,7 +639,6 @@ export function StudentsPage() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => setSelectedStudentForViolation(rowData)}>
-                <AlertCircle className="mr-2 h-4 w-4 text-amber-500" />
                 Xem vi phạm
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setEditTarget(rowData)}>Chỉnh sửa</DropdownMenuItem>

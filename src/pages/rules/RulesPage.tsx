@@ -99,7 +99,7 @@ function CreateRuleDialog({
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add Rule</DialogTitle>
+          <DialogTitle>Thêm luật</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
@@ -108,7 +108,7 @@ function CreateRuleDialog({
               name="name_vp"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Rule Name</FormLabel>
+                  <FormLabel>Tên luật</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g. Nói chuyện trong giờ học" {...field} />
                   </FormControl>
@@ -121,22 +121,9 @@ function CreateRuleDialog({
               name="minus_pnt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Penalty Points</FormLabel>
+                  <FormLabel>Điểm thưởng/phạt</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. -2" type="number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type (optional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. discipline" {...field} value={field.value ?? ''} />
+                    <Input placeholder="e.g. -5 với điểm phạt/5 với điểm thưởng" type="number" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -184,7 +171,7 @@ function EditRuleDialog({
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit Rule</DialogTitle>
+          <DialogTitle>Chỉnh sửa luật</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
@@ -193,7 +180,7 @@ function EditRuleDialog({
               name="name_vp"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Rule Name</FormLabel>
+                  <FormLabel>Tên luật</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g. Nói chuyện trong giờ học" {...field} />
                   </FormControl>
@@ -206,22 +193,9 @@ function EditRuleDialog({
               name="minus_pnt"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Penalty Points</FormLabel>
+                  <FormLabel>Điểm thưởng/phạt</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. -2" type="number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Type (optional)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g. discipline" {...field} value={field.value ?? ''} />
+                    <Input placeholder="e.g. -5 với điểm phạt/5 với điểm thưởng" type="number" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -267,7 +241,7 @@ export function RulesPage() {
         minus_pnt: parseInt(values.minus_pnt, 10),
         type: values.type && values.type.trim() !== '' ? values.type.trim() : null,
       });
-      toast.success('Rule created successfully');
+      toast.success('Thêm luật thành công');
       setShowCreate(false);
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : 'An error occurred');
@@ -283,7 +257,7 @@ export function RulesPage() {
         minus_pnt: parseInt(values.minus_pnt, 10),
         type: values.type && values.type.trim() !== '' ? values.type.trim() : null,
       });
-      toast.success('Rule updated successfully');
+      toast.success('Chỉnh sửa luật thành công');
       setEditTarget(null);
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : 'An error occurred');
@@ -294,7 +268,7 @@ export function RulesPage() {
     if (!deleteTarget) return;
     try {
       await deleteRule.mutateAsync(deleteTarget.name_vp_id);
-      toast.success(`Rule "${deleteTarget.name_vp}" deleted`);
+      toast.success(`Luật "${deleteTarget.name_vp}" đã bị xóa`);
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : 'Failed to delete rule');
     } finally {
@@ -304,8 +278,8 @@ export function RulesPage() {
 
   const columns: ColumnDef<RuleRow, unknown>[] = [
     { accessorKey: 'name_vp_id', header: 'ID' },
-    { accessorKey: 'name_vp', header: 'Rule Name' },
-    { accessorKey: 'minus_pnt', header: 'Penalty Pts' },
+    { accessorKey: 'name_vp', header: 'Tên luật' },
+    { accessorKey: 'minus_pnt', header: 'Điểm thưởng/phạt' },
     {
       id: 'actions',
       header: '',
@@ -317,7 +291,7 @@ export function RulesPage() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                 <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Open menu</span>
+                <span className="sr-only">Mở menu</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -344,7 +318,7 @@ export function RulesPage() {
         </div>
         <Button onClick={() => setShowCreate(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Add Rule
+          Thêm luật
         </Button>
       </div>
 
@@ -393,11 +367,11 @@ export function RulesPage() {
       <AlertDialog open={!!deleteTarget} onOpenChange={(o) => !o && setDeleteTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Rule</AlertDialogTitle>
+            <AlertDialogTitle>Xóa luật</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete rule{' '}
-              <span className="font-semibold">"{deleteTarget?.name_vp}"</span>? This action
-              cannot be undone.
+              Bạn có chắc muốn xóa luật này không{' '}
+              <span className="font-semibold">"{deleteTarget?.name_vp}"</span>? Hành vi này
+              không thể hoàn tác.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
