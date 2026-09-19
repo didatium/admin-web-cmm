@@ -1,6 +1,6 @@
 import { type ColumnDef, type CellContext } from '@tanstack/react-table';
 import { useState, useMemo } from 'react';
-import { CalendarIcon, MoreHorizontal, Plus, FileSpreadsheet, AlertCircle } from 'lucide-react';
+import { CalendarIcon, MoreHorizontal, Plus, FileSpreadsheet } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
